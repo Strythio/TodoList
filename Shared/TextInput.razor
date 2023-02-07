@@ -1,0 +1,20 @@
+<input placeholder="@Placeholder" value="@Value" @oninput="@OnInputChange" class="text-input" />
+
+@code {
+    [Parameter]
+    public string? Value { get; set; }
+    [Parameter]
+    public string? Placeholder { get; set; }
+
+    [Parameter]
+    public EventCallback<string> ValueChanged { get; set; }
+    private async Task OnInputChange(ChangeEventArgs args)
+    {
+        Value = (string)args.Value!;
+        await ValueChanged.InvokeAsync(Value);
+    }
+    public void Reset() {
+        Value = string.Empty;
+        this.StateHasChanged();
+    }
+}

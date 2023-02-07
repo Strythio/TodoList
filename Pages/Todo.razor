@@ -1,0 +1,38 @@
+﻿@page "/todo"
+
+<PageTitle>Todo</PageTitle>
+
+<h1>Todo (@todos.Count(todo => !todo.IsDone))
+</h1>
+
+<ul>
+    @foreach (var todo in todos)
+    {
+        <li>
+            <input type="checkbox" @bind="todo.IsDone" />
+            <TextInput Placeholder="Something todo" @bind-Value="@todo.Title" @bind-Value:event="ValueChanged" />
+            <button @onclick="() => DeleteTodo(todo)">Delete</button> @todo.Title
+        </li>
+    }
+</ul>
+
+<TextInput Placeholder="Something todo" @ref=@newTodo />
+<button @onclick="AddTodo">Add todo</button>
+
+@code {
+    private List<TodoItem> todos = new();
+
+    TextInput? newTodo;
+
+    private void DeleteTodo(TodoItem itemToDelete) {
+        todos.Remove(itemToDelete);
+    }
+    private void AddTodo()
+    {
+        if (!string.IsNullOrWhiteSpace(newTodo?.Value))
+        {
+            todos.Add(new TodoItem { Title = newTodo?.Value });
+            newTodo?.Reset();
+        }
+    }
+}
